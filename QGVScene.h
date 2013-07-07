@@ -1,16 +1,16 @@
 #ifndef QGVSCENE_H
 #define QGVSCENE_H
 
+#include <QGVCore.h>
 #include <QGraphicsScene>
 #include <QGVNode.h>
 #include <QGVEdge.h>
 #include <QGVSubGraph.h>
 
-#include <gvc.h>
-#include <cgraph.h>
-
-const qreal DotDefaultDPI = 72.0;
-
+/**
+ * @brief GraphViz interactive scene
+ *
+ */
 class QGVScene : public QGraphicsScene
 {
     Q_OBJECT
@@ -25,23 +25,13 @@ public:
 
     QGVNode* addNode(const QString& label);
     QGVEdge* addEdge(QGVNode* source, QGVNode* target, const QString& label=QString());
-    QGVSubGraph* addSubGraph(const QString& name);
+    QGVSubGraph* addSubGraph(const QString& name, bool cluster=true);
 
-
-    /*
-    //TODO
-    void removeNode(QGVNode* node);
-    QGVNode* findNode(const QString& name);
-    void clearNodes();
-    void removeEdge(QGVNode* source, QGVNode* target);
-    QGVEdge* findEdge(const QString& name);
-
-    void setFont(QFont font);
-    */
     void setRootNode(QGVNode *node);
 
     void loadLayout(const QString &text);
     void applyLayout();
+    void clear();
 
 
 signals:
@@ -50,6 +40,11 @@ signals:
 
     void edgeContextMenu(QGVEdge* edge);
     void edgeDoubleClick(QGVEdge* edge);
+
+    void subGraphContextMenu(QGVSubGraph* graph);
+    void subGraphDoubleClick(QGVSubGraph* graph);
+
+    void graphContextMenuEvent();
     
 public slots:
 

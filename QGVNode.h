@@ -1,27 +1,31 @@
 #ifndef QGVNODE_H
 #define QGVNODE_H
 
+#include <QGVCore.h>
 #include <QGraphicsItem>
 #include <QPen>
-#include <gvc.h>
-#include <cgraph.h>
 
 class QGVEdge;
 class QGVScene;
 
+/**
+ * @brief Node item
+ *
+ */
 class QGVNode : public QGraphicsItem
 {
 public:
-    QGVNode(const QString &label, QGVScene *scene);
-    QGVNode(Agnode_t* node, QGVScene *scene);
     ~QGVNode();
 
-    QString name() const;
+    QString label() const;
+    void setLabel(const QString &label);
 
     QRectF boundingRect() const;
     void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = 0);
-    void setAttribute(const QString &name, const QString &value);
-    void updateLayout();
+    void setAttribute(const QString &label, const QString &value);
+    QString getAttribute(const QString &name) const;
+
+    void setIcon(const QImage &icon);
 
     enum { Type = UserType + 2 };
     int type() const
@@ -30,21 +34,21 @@ public:
     }
 
 private:
+    friend class QGVScene;
+    friend class QGVSubGraph;
+    void updateLayout();
+    QGVNode(Agnode_t* node, QGVScene *scene);
 
     QPainterPath makeShape(Agnode_t* node) const;
     QPolygonF makeShapeHelper(Agnode_t* node) const;
 
-    friend class QGVEdge;
-    friend class QGVSubGraph;
-
-    double _height, _width;
     QPainterPath _path;
     QPen _pen;
     QBrush _brush;
-    QGVScene *_scene;
+    QImage _icon;
 
+    QGVScene *_scene;
     Agnode_t* _node;
-    QList<QGVEdge*> _edges;
 };
 
 

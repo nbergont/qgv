@@ -1,19 +1,20 @@
 #ifndef QGVEDGE_H
 #define QGVEDGE_H
 
+#include <QGVCore.h>
 #include <QGraphicsItem>
 #include <QPen>
-#include <gvc.h>
-#include <cgraph.h>
 
 class QGVNode;
 class QGVScene;
 
+/**
+ * @brief Edge item
+ *
+ */
 class QGVEdge : public QGraphicsItem
 {
 public:
-    QGVEdge(QGVNode *source, QGVNode *target, const QString &label, QGVScene *scene);
-    QGVEdge(Agedge_t *edge, QGVScene *scene);
     ~QGVEdge();
 
     QString label() const;
@@ -25,6 +26,8 @@ public:
     void paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget = 0);
 
     void setAttribute(const QString &name, const QString &value);
+    QString getAttribute(const QString &name) const;
+
     void updateLayout();
 
     enum { Type = UserType + 3 };
@@ -34,17 +37,23 @@ public:
     }
 
 private:
-    friend class QGVSubGraph;
+    QGVEdge(Agedge_t *edge, QGVScene *scene);
+
+    QPolygonF toArrow(const QLineF &normal) const;
+
+    friend class QGVScene;
+    //friend class QGVSubGraph;
 
     QGVScene *_scene;
     Agedge_t* _edge;
 
-    QGVNode *_source;
-    QGVNode *_target;
-
     QPainterPath _path;
     QPen _pen;
-    QPolygonF _arrow;
+    QPolygonF _head_arrow;
+    QPolygonF _tail_arrow;
+
+    QString _label;
+    QRectF _label_rect;
 };
 
 #endif // QGVEDGE_H

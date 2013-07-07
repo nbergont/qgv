@@ -12,14 +12,15 @@ TARGET = QGraphViz
 TEMPLATE = app
 
 
-#Configure GraphViz
-GRAPHVIZ_DIR = $$PWD/GraphViz
+#Configure GraphViz path here :
+GRAPHVIZ_PATH = C:/GraphViz
 
+#GraphViz librairie
 DEFINES += WIN32_DLL
 DEFINES += GVDLL
 DEFINES += WITH_CGRAPH
-INCLUDEPATH += $$GRAPHVIZ_DIR/include
-LIBS += -L$$GRAPHVIZ_DIR/lib/release/lib -lgvc -lcgraph -lgraph -lcdt
+INCLUDEPATH += $$GRAPHVIZ_PATH/include
+LIBS += -L$$GRAPHVIZ_PATH/lib/release/lib -lgvc -lcgraph -lgraph -lcdt
 
 
 SOURCES += main.cpp\
@@ -28,13 +29,18 @@ SOURCES += main.cpp\
     QGraphicsViewEc.cpp \
     QGVNode.cpp \
     QGVEdge.cpp \
-    QGVSubGraph.cpp
+    QGVSubGraph.cpp \
+    QGVCore.cpp
 
 HEADERS  += MainWindow.h \
     QGVScene.h \
     QGraphicsViewEc.h \
     QGVNode.h \
     QGVEdge.h \
-    QGVSubGraph.h
+    QGVSubGraph.h \
+    QGVCore.h
 
 FORMS    += MainWindow.ui
+
+RESOURCES += \
+    ress.qrc

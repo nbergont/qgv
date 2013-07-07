@@ -18,7 +18,7 @@
     <item>
      <widget class="QGraphicsViewEc" name="graphicsView">
       <property name="renderHints">
-       <set>QPainter::Antialiasing|QPainter::TextAntialiasing</set>
+       <set>QPainter::Antialiasing|QPainter::SmoothPixmapTransform|QPainter::TextAntialiasing</set>
       </property>
       <property name="dragMode">
        <enum>QGraphicsView::ScrollHandDrag</enum>

@@ -15,6 +15,7 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
+    void drawGraph();
 
 private slots:
     void nodeContextMenu(QGVNode* node);

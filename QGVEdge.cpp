@@ -3,52 +3,24 @@
 #include <QDebug>
 #include <QPainter>
 
-
-QGVEdge::QGVEdge(QGVNode *source, QGVNode *target, const QString &label, QGVScene *scene) : _scene(scene), _source(source), _target(target)
-{
-    //_edge = agidedge(_scene->_graph, _source->_node, _target->_node, _scene->_edges.count()+1, TRUE);
-    _edge = agedge(_scene->_graph, _source->_node, _target->_node, NULL, TRUE);
-    Q_ASSERT(_edge);
-    if(_edge == NULL)
-    {
-        qWarning()<<"Invalid egde :"<<label;
-        //_edge = agedge(_scene->_graph, _source->_node, _target->_node, NULL, FALSE);
-    }
-
-    //_source->_edges.append(this);
-    //_target->_edges.append(this);
-
-    _scene->_edges.append(this);
-    _scene->addItem(this);
-
-    setLabel(label);
-
-    setFlag(QGraphicsItem::ItemIsSelectable, true);
-}
-
 QGVEdge::QGVEdge(Agedge_t *edge, QGVScene *scene) :  _edge(edge), _scene(scene)
 {
-    updateLayout();
+    setFlag(QGraphicsItem::ItemIsSelectable, true);
 }
 
 QGVEdge::~QGVEdge()
 {
-    _source->_edges.removeOne(this);
-    _target->_edges.removeOne(this);
-
     _scene->removeItem(this);
-    _scene->_edges.removeOne(this);
-    //agdeledget(_scene->_graph, _edge);
 }
 
 QString QGVEdge::label() const
 {
-    return QString::fromLocal8Bit(ED_label(_edge)->text);
+    return getAttribute("xlabel");
 }
 
 QRectF QGVEdge::boundingRect() const
 {
-    return _path.boundingRect();
+    return _path.boundingRect() | _head_arrow.boundingRect() | _tail_arrow.boundingRect() | _label_rect;
 }
 
 QPainterPath QGVEdge::shape() const
@@ -71,20 +43,35 @@ void QGVEdge::paint(QPainter * painter, const QStyleOptionGraphicsItem * option,
     painter->save();
 
     if(isSelected())
-        painter->setPen(QPen(Qt::SolidPattern, 1, Qt::DashLine));
+    {
+        QPen tpen(_pen);
+        tpen.setColor(_pen.color().darker(120));
+        tpen.setStyle(Qt::DotLine);
+        painter->setPen(tpen);
+    }
     else
         painter->setPen(_pen);
 
 
     painter->drawPath(_path);
 
+    /*
+    QRectF pp = _path.controlPointRect();
+    if(pp.width() < pp.height())
+    {
+        painter->save();
+        painter->translate(_label_rect.topLeft());
+        painter->rotate(90);
+        painter->drawText(QRectF(QPointF(0, -_label_rect.width()), _label_rect.size()), Qt::AlignCenter, _label);
+        painter->restore();
+    }
+    else
+    */
+    painter->drawText(_label_rect, Qt::AlignCenter, _label);
 
-    textlabel_t *xlabel = ED_xlabel(_edge);
-    if(xlabel)
-        painter->drawText(xlabel->pos.x - xlabel->dimen.x/2, GD_bb(_scene->_graph).UR.y - xlabel->pos.y + 4, xlabel->text);
-
-    painter->setBrush(Qt::SolidPattern);
-    painter->drawPolygon(_arrow);
+    painter->setBrush(QBrush(_pen.color(), Qt::SolidPattern));
+    painter->drawPolygon(_head_arrow);
+    painter->drawPolygon(_tail_arrow);
     painter->restore();
 }
 
@@ -93,54 +80,64 @@ void QGVEdge::setAttribute(const QString &name, const QString &value)
     agsafeset(_edge, name.toLocal8Bit().data(), value.toLocal8Bit().data(), "");
 }
 
+QString QGVEdge::getAttribute(const QString &name) const
+{
+    char* value = agget(_edge, name.toLocal8Bit().data());
+    if(value)
+        return value;
+    return QString();
+}
+
 void QGVEdge::updateLayout()
 {
     prepareGeometryChange();
 
-    _path = QPainterPath();
+    qreal gheight = QGVCore::graphHeight(_scene->_graph);
 
     const splines* spl = ED_spl(_edge);
+    _path = QGVCore::toPath(spl, gheight);
 
 
+    //Edge arrows
     if((spl->list != 0) && (spl->list->size%3 == 1))
     {
-        qreal ymax = GD_bb(_scene->_graph).UR.y;
-        //If there is a starting point, draw a line from it to the first curve point
         if(spl->list->sflag)
         {
-            _path.moveTo(spl->list->sp.x, (ymax - spl->list->sp.y));
-            _path.lineTo(spl->list->list[0].x, (ymax - spl->list->list[0].y));
+            _tail_arrow = toArrow(QLineF(QGVCore::toPoint(spl->list->list[0], gheight), QGVCore::toPoint(spl->list->sp, gheight)));
         }
-        else
-            _path.moveTo(spl->list->list[0].x, (ymax - spl->list->list[0].y));
 
-        //Loop over the curve points
-        for(int i=1; i<spl->list->size; i+=3)
-            _path.cubicTo(spl->list->list[i].x,(ymax - spl->list->list[i].y), spl->list->list[i+1].x,
-                    (ymax - spl->list->list[i+1].y),
-                    spl->list->list[i+2].x,
-                    (ymax - spl->list->list[i+2].y));
-
-        //If there is an ending point, draw a line to it
         if(spl->list->eflag)
-            _path.lineTo(spl->list->ep.x, (ymax - spl->list->ep.y));
-
-
-        //Calcul de la fleche
-        QLineF line(spl->list->list[spl->list->size-1].x, (ymax - spl->list->list[spl->list->size-1].y), spl->list->ep.x, (ymax - spl->list->ep.y));
-
-        QLineF n(line.normalVector());
-        QPointF o(n.dx() / 3.0, n.dy() / 3.0);
-
-        QPolygonF polygon;
-        polygon.append(line.p1() + o);
-        polygon.append(line.p2());
-        polygon.append(line.p1() - o);
-        _arrow = polygon;
+        {
+            _head_arrow = toArrow(QLineF(QGVCore::toPoint(spl->list->list[spl->list->size-1], gheight), QGVCore::toPoint(spl->list->ep, gheight)));
+        }
     }
 
-    //ED_edge_type(_edge)
     _pen.setWidth(1);
+    _pen.setColor(QGVCore::toColor(getAttribute("color")));
+    _pen.setStyle(QGVCore::toPenStyle(getAttribute("style")));
 
-    //qDebug()<<_name<<_path;
+    //Edge label
+    textlabel_t *xlabel = ED_xlabel(_edge);
+    if(xlabel)
+    {
+        _label = xlabel->text;
+        _label_rect.setSize(QSize(xlabel->dimen.x, xlabel->dimen.y));
+        _label_rect.moveCenter(QGVCore::toPoint(xlabel->pos, QGVCore::graphHeight(_scene->_graph)));
+    }
+
+    setToolTip(getAttribute("tooltip"));
+}
+
+QPolygonF QGVEdge::toArrow(const QLineF &line) const
+{
+    QLineF n = line.normalVector();
+    QPointF o(n.dx() / 3.0, n.dy() / 3.0);
+
+    //Only support normal arrow type
+    QPolygonF polygon;
+    polygon.append(line.p1() + o);
+    polygon.append(line.p2());
+    polygon.append(line.p1() - o);
+
+    return polygon;
 }

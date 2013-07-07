@@ -3,6 +3,10 @@
 
 #include <QGraphicsView>
 
+/**
+ * @brief Graphics view with wheel zoom
+ *
+ */
 class QGraphicsViewEc : public QGraphicsView
 {
     Q_OBJECT
