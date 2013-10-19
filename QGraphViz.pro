@@ -11,17 +11,21 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 TARGET = QGraphViz
 TEMPLATE = app
 
-
-#Configure GraphViz path here :
-GRAPHVIZ_PATH = C:/GraphViz
-
 #GraphViz librairie
-DEFINES += WIN32_DLL
-DEFINES += GVDLL
 DEFINES += WITH_CGRAPH
-INCLUDEPATH += $$GRAPHVIZ_PATH/include
-LIBS += -L$$GRAPHVIZ_PATH/lib/release/lib -lgvc -lcgraph -lgraph -lcdt
 
+unix {
+ CONFIG += link_pkgconfig
+ PKGCONFIG += libcdt libgvc libcgraph libgraph
+}
+win32 {
+ #Configure Windows GraphViz path here :
+ GRAPHVIZ_PATH = C:/GraphViz
+ DEFINES += WIN32_DLL
+ DEFINES += GVDLL
+ INCLUDEPATH += $$GRAPHVIZ_PATH/include
+ LIBS += -L$$GRAPHVIZ_PATH/lib/release/lib -lgvc -lcgraph -lgraph -lcdt
+}
 
 SOURCES += main.cpp\
         MainWindow.cpp \
