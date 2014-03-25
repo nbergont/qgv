@@ -32,11 +32,14 @@ class MainWindow : public QMainWindow
 public:
     explicit MainWindow(QWidget *parent = 0);
     ~MainWindow();
-    void drawGraph();
 
 private slots:
+    void drawGraph();
     void nodeContextMenu(QGVNode* node);
     void nodeDoubleClick(QGVNode* node);
+    void nodeEdgeClick(QGVEdge *edge);
+
+    void on_pushButton_clicked();
 
 private:
     Ui::MainWindow *ui;
