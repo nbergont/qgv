@@ -6,6 +6,13 @@
 
 QT       += core
 
+greaterThan(QT_MAJOR_VERSION, 4){
+    QT += widgets
+}
+lessThan(QT_MAJOR_VERSION, 5) {
+    QT += gui
+}
+
 TARGET = QGVCore
 TEMPLATE = lib
 CONFIG += shared

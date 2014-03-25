@@ -236,7 +236,7 @@ void QGVScene::clear()
 #include <QGraphicsSceneContextMenuEvent>
 void QGVScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *contextMenuEvent)
 {
-    QGraphicsItem *item = itemAt(contextMenuEvent->scenePos());
+    QGraphicsItem *item = itemAt(contextMenuEvent->scenePos(), QTransform());
     if(item)
     {
         item->setSelected(true);
@@ -254,7 +254,7 @@ void QGVScene::contextMenuEvent(QGraphicsSceneContextMenuEvent *contextMenuEvent
 
 void QGVScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *mouseEvent)
 {
-    QGraphicsItem *item = itemAt(mouseEvent->scenePos());
+    QGraphicsItem *item = itemAt(mouseEvent->scenePos(), QTransform());
     if(item)
     {
         if(item->type() == QGVNode::Type)
