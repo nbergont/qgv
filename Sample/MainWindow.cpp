@@ -16,11 +16,13 @@ You should have received a copy of the GNU Lesser General Public
 License along with this library.
 ***************************************************************/
 #include "MainWindow.h"
+#include "moc_MainWindow.cpp"
 #include "ui_MainWindow.h"
 #include "QGVScene.h"
-#include "QGVScene.h"
+#include "QGVNode.h"
+#include "QGVEdge.h"
+#include "QGVSubGraph.h"
 #include <QMessageBox>
-#include <QMenu>
 
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
@@ -33,7 +35,6 @@ MainWindow::MainWindow(QWidget *parent) :
 
     connect(_scene, SIGNAL(nodeContextMenu(QGVNode*)), SLOT(nodeContextMenu(QGVNode*)));
     connect(_scene, SIGNAL(nodeDoubleClick(QGVNode*)), SLOT(nodeDoubleClick(QGVNode*)));
-    connect(_scene, SIGNAL(edgeDoubleClick(QGVEdge*)), SLOT(nodeEdgeClick(QGVEdge*)));
 }
 
 MainWindow::~MainWindow()
@@ -45,9 +46,11 @@ void MainWindow::drawGraph()
 {
     /*
     _scene->loadLayout("digraph test{node [style=filled,fillcolor=white];N1 -> N2;N2 -> N3;N3 -> N4;N4 -> N1;}");
+    connect(_scene, SIGNAL(nodeContextMenu(QGVNode*)), SLOT(nodeContextMenu(QGVNode*)));
+    connect(_scene, SIGNAL(nodeDoubleClick(QGVNode*)), SLOT(nodeDoubleClick(QGVNode*)));
+    ui->graphicsView->setScene(_scene);
     return;
     */
-    _scene->clear();
 
     //Configure scene attributes
     _scene->setGraphAttribute("label", "DEMO");
@@ -120,6 +123,8 @@ void MainWindow::nodeContextMenu(QGVNode *node)
 {
     //Context menu exemple
     QMenu menu(node->label());
+
+    menu.addSeparator();
     menu.addAction(tr("Informations"));
     menu.addAction(tr("Options"));
 
@@ -130,15 +135,5 @@ void MainWindow::nodeContextMenu(QGVNode *node)
 
 void MainWindow::nodeDoubleClick(QGVNode *node)
 {
-    QMessageBox::information(this, tr("Node"), tr("Node %1").arg(node->label()));
-}
-
-void MainWindow::nodeEdgeClick(QGVEdge *edge)
-{
-    QMessageBox::information(this, tr("Edge"), tr("Edge %1").arg(edge->label()));
-}
-
-void MainWindow::on_pushButton_clicked()
-{
-    drawGraph();
+    QMessageBox::information(this, tr("Node double clicked"), tr("Node %1").arg(node->label()));
 }

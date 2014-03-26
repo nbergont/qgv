@@ -1,5 +1,7 @@
 #GraphViz librairie
 DEFINES += WITH_CGRAPH
+INCLUDEPATH += private
+QMAKE_CXXFLAGS += -DQGVCORE_LIB -DQMAKE_MOC
 
 unix {
  CONFIG += link_pkgconfig
@@ -7,7 +9,7 @@ unix {
 }
 win32 {
  #Configure Windows GraphViz path here :
- GRAPHVIZ_PATH = "C:/Program Files (x86)/Graphviz2.36"
+ GRAPHVIZ_PATH = "D:/Program Files (x86)/Graphviz2.36/"
  DEFINES += WIN32_DLL
  DEFINES += GVDLL
  INCLUDEPATH += $$GRAPHVIZ_PATH/include/graphviz

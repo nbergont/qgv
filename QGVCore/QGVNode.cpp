@@ -16,11 +16,14 @@ You should have received a copy of the GNU Lesser General Public
 License along with this library.
 ***************************************************************/
 #include <QGVNode.h>
+#include <QGVCore.h>
 #include <QGVScene.h>
+#include <QGVGraphPrivate.h>
+#include <QGVNodePrivate.h>
 #include <QDebug>
 #include <QPainter>
 
-QGVNode::QGVNode(Agnode_t* node, QGVScene *scene): _node(node), _scene(scene)
+QGVNode::QGVNode(QGVNodePrivate *node, QGVScene *scene): _node(node), _scene(scene)
 {
     setFlag(QGraphicsItem::ItemIsSelectable, true);
 }
@@ -28,6 +31,7 @@ QGVNode::QGVNode(Agnode_t* node, QGVScene *scene): _node(node), _scene(scene)
 QGVNode::~QGVNode()
 {
     _scene->removeItem(this);
+		delete _node;
 }
 
 QString QGVNode::label() const
@@ -82,12 +86,12 @@ void QGVNode::paint(QPainter * painter, const QStyleOptionGraphicsItem * option,
 
 void QGVNode::setAttribute(const QString &name, const QString &value)
 {
-    agsafeset(_node, name.toLocal8Bit().data(), value.toLocal8Bit().data(), "");
+		agsafeset(_node->node(), name.toLocal8Bit().data(), value.toLocal8Bit().data(), "");
 }
 
 QString QGVNode::getAttribute(const QString &name) const
 {
-    char* value = agget(_node, name.toLocal8Bit().data());
+		char* value = agget(_node->node(), name.toLocal8Bit().data());
     if(value)
         return value;
     return QString();
@@ -101,18 +105,18 @@ void QGVNode::setIcon(const QImage &icon)
 void QGVNode::updateLayout()
 {
     prepareGeometryChange();
-    qreal width = ND_width(_node)*DotDefaultDPI;
-    qreal height = ND_height(_node)*DotDefaultDPI;
+		qreal width = ND_width(_node->node())*DotDefaultDPI;
+		qreal height = ND_height(_node->node())*DotDefaultDPI;
 
     //Node Position (center)
-    qreal gheight = QGVCore::graphHeight(_scene->_graph);
-    setPos(QGVCore::centerToOrigin(QGVCore::toPoint(ND_coord(_node), gheight), width, height));
+		qreal gheight = QGVCore::graphHeight(_scene->_graph->graph());
+		setPos(QGVCore::centerToOrigin(QGVCore::toPoint(ND_coord(_node->node()), gheight), width, height));
 
     //Node on top
     setZValue(1);
 
     //Node path
-    _path = QGVCore::toPath(ND_shape(_node)->name, (polygon_t*)ND_shape_info(_node), width, height);
+		_path = QGVCore::toPath(ND_shape(_node->node())->name, (polygon_t*)ND_shape_info(_node->node()), width, height);
     _pen.setWidth(1);
 
     _brush.setStyle(QGVCore::toBrushStyle(getAttribute("style")));

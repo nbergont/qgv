@@ -16,6 +16,7 @@ You should have received a copy of the GNU Lesser General Public
 License along with this library.
 ***************************************************************/
 #include "QGraphicsViewEc.h"
+#include "moc_QGraphicsViewEc.cpp"
 #include <QWheelEvent>
 #include <qmath.h>
 

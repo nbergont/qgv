@@ -18,18 +18,19 @@ License along with this library.
 #ifndef QGVNODE_H
 #define QGVNODE_H
 
-#include <QGVCore.h>
+#include <qgv.h>
 #include <QGraphicsItem>
 #include <QPen>
 
 class QGVEdge;
 class QGVScene;
+class QGVNodePrivate;
 
 /**
  * @brief Node item
  *
  */
-class QGVNode : public QGraphicsItem
+class QGVCORE_EXPORT QGVNode : public QGraphicsItem
 {
 public:
     ~QGVNode();
@@ -54,10 +55,11 @@ private:
     friend class QGVScene;
     friend class QGVSubGraph;
     void updateLayout();
-    QGVNode(Agnode_t* node, QGVScene *scene);
+		QGVNode(QGVNodePrivate* node, QGVScene *scene);
 
-    QPainterPath makeShape(Agnode_t* node) const;
-    QPolygonF makeShapeHelper(Agnode_t* node) const;
+		// Not implemented in QGVNode.cpp
+//		QPainterPath makeShape(Agnode_t* node) const;
+//		QPolygonF makeShapeHelper(Agnode_t* node) const;
 
     QPainterPath _path;
     QPen _pen;
@@ -65,7 +67,7 @@ private:
     QImage _icon;
 
     QGVScene *_scene;
-    Agnode_t* _node;
+		QGVNodePrivate* _node;
 };
 
 

@@ -18,18 +18,19 @@ License along with this library.
 #ifndef QGVEDGE_H
 #define QGVEDGE_H
 
-#include <QGVCore.h>
+#include <qgv.h>
 #include <QGraphicsItem>
 #include <QPen>
 
 class QGVNode;
 class QGVScene;
+class QGVEdgePrivate;
 
 /**
  * @brief Edge item
  *
  */
-class QGVEdge : public QGraphicsItem
+class QGVCORE_EXPORT QGVEdge : public QGraphicsItem
 {
 public:
     ~QGVEdge();
@@ -54,7 +55,7 @@ public:
     }
 
 private:
-    QGVEdge(Agedge_t *edge, QGVScene *scene);
+		QGVEdge(QGVEdgePrivate *edge, QGVScene *scene);
 
     QPolygonF toArrow(const QLineF &normal) const;
 
@@ -62,7 +63,7 @@ private:
     //friend class QGVSubGraph;
 
     QGVScene *_scene;
-    Agedge_t* _edge;
+		QGVEdgePrivate* _edge;
 
     QPainterPath _path;
     QPen _pen;

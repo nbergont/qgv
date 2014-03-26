@@ -18,18 +18,21 @@ License along with this library.
 #ifndef QGVSCENE_H
 #define QGVSCENE_H
 
-#include <QGVCore.h>
+#include <qgv.h>
 #include <QGraphicsScene>
-#include <QGVNode.h>
-#include <QGVEdge.h>
-#include <QGVSubGraph.h>
 
+class QGVNode;
+class QGVEdge;
+class QGVSubGraph;
+
+class QGVGraphPrivate;
+class QGVGvcPrivate;
 
 /**
  * @brief GraphViz interactive scene
  *
  */
-class QGVScene : public QGraphicsScene
+class QGVCORE_EXPORT QGVScene : public QGraphicsScene
 {
     Q_OBJECT
 public:
@@ -75,8 +78,8 @@ private:
     friend class QGVEdge;
     friend class QGVSubGraph;
 
-    GVC_t *_context;
-    Agraph_t *_graph;
+		QGVGvcPrivate *_context;
+		QGVGraphPrivate *_graph;
     //QFont _font;
 
     QList<QGVNode*> _nodes;

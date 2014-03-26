@@ -6,13 +6,6 @@
 
 QT       += core
 
-greaterThan(QT_MAJOR_VERSION, 4){
-    QT += widgets
-}
-lessThan(QT_MAJOR_VERSION, 5) {
-    QT += gui
-}
-
 TARGET = QGVCore
 TEMPLATE = lib
 CONFIG += shared
@@ -29,10 +22,19 @@ SOURCES += QGVScene.cpp \
     QGVNode.cpp \
     QGVEdge.cpp \
     QGVSubGraph.cpp \
-    QGVCore.cpp
+		private/QGVCore.cpp \
+		private/QGVGraphPrivate.cpp \
+		private/QGVGvcPrivate.cpp \
+		private/QGVEdgePrivate.cpp \
+		private/QGVNodePrivate.cpp
 
 HEADERS  += QGVScene.h \
     QGVNode.h \
     QGVEdge.h \
     QGVSubGraph.h \
-    QGVCore.h
+		private/QGVCore.h \
+		private/QGVGraphPrivate.h \
+		private/QGVGvcPrivate.h \
+		private/QGVEdgePrivate.h \
+		private/QGVNodePrivate.h \
+    qgv.h

@@ -18,19 +18,20 @@ License along with this library.
 #ifndef QGVSUBGRAPH_H
 #define QGVSUBGRAPH_H
 
-#include <QGVCore.h>
+#include <qgv.h>
 #include <QGraphicsItem>
 #include <QPen>
 
 class QGVNode;
 class QGVEdge;
 class QGVScene;
+class QGVGraphPrivate;
 
 /**
  * @brief SubGraph item
  *
  */
-class QGVSubGraph : public QGraphicsItem
+class QGVCORE_EXPORT QGVSubGraph : public QGraphicsItem
 {
 public:
     ~QGVSubGraph();
@@ -55,7 +56,7 @@ public:
 
 private:
     friend class QGVScene;
-    QGVSubGraph(Agraph_t* subGraph, QGVScene *scene);
+		QGVSubGraph(QGVGraphPrivate* subGraph, QGVScene *scene);
 
     double _height, _width;
     QPen _pen;
@@ -65,7 +66,7 @@ private:
     QRectF _label_rect;
 
     QGVScene *_scene;
-    Agraph_t *_sgraph;
+		QGVGraphPrivate *_sgraph;
     QList<QGVNode*> _nodes;
 };
 
