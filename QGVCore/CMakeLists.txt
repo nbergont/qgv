@@ -105,32 +105,35 @@ IF(WIN32)
 	# INSTALL(FILES ${QUAZIP_LIBRARIES} ${PACK_zlib} DESTINATION ${bin_DIR} COMPONENT library)
 
 	# Qt itself
-	# FIND_FILE(PACK_qtcore QtCore4.dll PATHS ${QT_BINARY_DIR} NO_DEFAULT_PATH)
-	# FIND_FILE(PACK_qtgui QtGui4.dll PATHS ${QT_BINARY_DIR} NO_DEFAULT_PATH)
-	# FIND_FILE(PACK_qtnetwork QtNetwork4.dll PATHS ${QT_BINARY_DIR} NO_DEFAULT_PATH)
-	# FIND_FILE(PACK_qtsql QtSql4.dll PATHS ${QT_BINARY_DIR} NO_DEFAULT_PATH)
-	# FIND_FILE(PACK_qtxml QtXml4.dll PATHS ${QT_BINARY_DIR} NO_DEFAULT_PATH)
-	# FIND_FILE(PACK_qtxml_patterns QtXmlPatterns4.dll PATHS ${QT_BINARY_DIR} NO_DEFAULT_PATH)
+	FIND_FILE(PACK_qtcore QtCore4.dll PATHS ${QT_BINARY_DIR} NO_DEFAULT_PATH)
+	FIND_FILE(PACK_qtgui QtGui4.dll PATHS ${QT_BINARY_DIR} NO_DEFAULT_PATH)
 	
-	# FIND_FILE(PACK_mingwm10 mingwm10.dll PATHS ${QT_BINARY_DIR} NO_DEFAULT_PATH)
-	# FIND_FILE(PACK_libgcc_s_dw libgcc_s_dw2-1.dll PATHS ${QT_BINARY_DIR} NO_DEFAULT_PATH)
+	FIND_FILE(PACK_mingwm10 mingwm10.dll PATHS ${QT_BINARY_DIR} NO_DEFAULT_PATH)
+	FIND_FILE(PACK_libgcc_s_dw libgcc_s_dw2-1.dll PATHS ${QT_BINARY_DIR} NO_DEFAULT_PATH)
 	
-	# INSTALL(
-		# FILES 
-			# ${PACK_qtcore}
-			# ${PACK_qtgui}
+	INSTALL(
+		FILES 
+			${PACK_qtcore}
+			${PACK_qtgui}
 			# ${PACK_qtnetwork}
 			# ${PACK_qtsql}
 			# ${PACK_libmysql}
 			# ${PACK_qtxml}
 			# ${PACK_qtxml_patterns}
-			# ${PACK_mingwm10}
-			# ${PACK_libgcc_s_dw}
-      # ${LIBENGSAS_LIBRARIES}
-      # ${LIBENGSAS_EPARTEXE}
-		# DESTINATION ${bin_DIR}
-		# COMPONENT qtlibs
-	# )
+			${PACK_mingwm10}
+			${PACK_libgcc_s_dw}
+      DESTINATION ${bin_DIR}
+		COMPONENT qtlibs
+	)
+  
+  INSTALL(
+    FILES
+      ${GRAPHVIZ_GVC_LIBRARY}
+      ${GRAPHVIZ_CGRAPH_LIBRARY}
+      ${GRAPHVIZ_CDT_LIBRARY}
+      DESTINATION ${bin_DIR}
+    COMPONENT graphvizlibs
+  )
 ENDIF(WIN32)
 
 IF(BUILD_DEV)
