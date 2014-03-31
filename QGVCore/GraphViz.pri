@@ -1,7 +1,7 @@
 #GraphViz librairie
 DEFINES += WITH_CGRAPH
 INCLUDEPATH += private
-QMAKE_CXXFLAGS += -DQGVCORE_LIB -DQMAKE_MOC
+QMAKE_CXXFLAGS += -DQGVCORE_LIB
 
 unix {
  CONFIG += link_pkgconfig

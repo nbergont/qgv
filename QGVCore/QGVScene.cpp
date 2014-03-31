@@ -17,9 +17,7 @@ License along with this library.
 ***************************************************************/
 #include "QGVScene.h"
 // The following include allows the automoc to detect, that it must moc this class
-#ifndef QMAKE_MOC
-	#include "moc_QGVScene.cpp"
-#endif
+#include "moc_QGVScene.cpp"
 #include <QDebug>
 
 #include <QGVNode.h>
