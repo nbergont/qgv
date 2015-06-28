@@ -13,16 +13,18 @@ Features :
 * Tested only on dot engine
 * Only 6 headers/sources files to add
 
+
 Screen capture :
 ----------------
 
 ![Screen capture](http://i39.tinypic.com/2gy1z0h.png)
 
+* Windows binairies demo here : https://github.com/nbergont/qgv/releases
 
 Installation :
 --------------
 
-* Download qgv sources from GIT : git clone https://code.google.com/p/qgv/
+* Download qgv sources from GIT : git clone https://github.com/nbergont/qgv.git
 * Download graphViz librairie : http://www.graphviz.org/Download.php
 * Configure GRAPHVIZ_PATH in QGraphViz.pro
 * Open with Qt Creator & compile
