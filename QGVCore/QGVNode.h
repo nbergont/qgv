@@ -18,7 +18,7 @@ License along with this library.
 #ifndef QGVNODE_H
 #define QGVNODE_H
 
-#include <qgv.h>
+#include "qgv.h"
 #include <QGraphicsItem>
 #include <QPen>
 
