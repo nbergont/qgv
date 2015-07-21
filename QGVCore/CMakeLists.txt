@@ -21,6 +21,8 @@ SET(qgvlib_CPP
   QGVSubGraph.cpp
 )
 
+SET(TARGET_NAME "QGVCore")
+
 # include with QT_USE selected library parts
 INCLUDE(${QT_USE_FILE})
 
@@ -98,6 +100,12 @@ ENDIF(WIN32)
   # DESTINATION ${qm_DIR}  
   # COMPONENT library
 # )
+
+configure_file( ${CMAKE_CURRENT_SOURCE_DIR}/${TARGET_NAME}.pc.in
+                ${CMAKE_CURRENT_BINARY_DIR}/${TARGET_NAME}.pc @ONLY)
+
+INSTALL(FILES ${CMAKE_CURRENT_BINARY_DIR}/${TARGET_NAME}.pc
+                DESTINATION lib/pkgconfig)
 
 IF(WIN32)
 	# QuaZip
