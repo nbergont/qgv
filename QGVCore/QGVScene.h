@@ -51,7 +51,9 @@ public:
     void setRootNode(QGVNode *node);
 
     void loadLayout(const QString &text);
-    void applyLayout();
+    void applyLayout(const QString &algorithm = "dot");
+    void render (const QString &algorithm);
+    void freeLayout();
     void clear();
 
 
@@ -88,6 +90,7 @@ private:
     QList<QGVNode*> _nodes;
     QList<QGVEdge*> _edges;
     QList<QGVSubGraph*> _subGraphs;
+    QGraphicsTextItem* _label;
 };
 
 #endif // QGVSCENE_H
