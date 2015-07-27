@@ -51,6 +51,9 @@ public:
         return Type;
     }
 
+protected:
+    QVariant itemChange (GraphicsItemChange change, const QVariant & value);
+
 private:
     friend class QGVScene;
     friend class QGVSubGraph;

@@ -38,6 +38,7 @@ class QGVCore
 {
 public:
     static qreal graphHeight(Agraph_t *graph);
+    static QString qtToGvPos (QPointF pos, qreal gheight);
     static QPointF toPoint(pointf p, qreal gheight);
     static QPointF toPoint(point p, qreal gheight);
     static QPointF centerToOrigin(const QPointF &p, qreal width, qreal height);

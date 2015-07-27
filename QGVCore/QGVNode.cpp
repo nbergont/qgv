@@ -103,6 +103,31 @@ void QGVNode::setIcon(const QImage &icon)
     _icon = icon;
 }
 
+QVariant QGVNode::itemChange (GraphicsItemChange change, const QVariant & value)
+{
+  if (change == ItemPositionChange && _scene) {
+    // value is the new position.
+    QString oldStr = getAttribute(QString::fromLocal8Bit("pos"));
+    qreal gheight = QGVCore::graphHeight(_scene->_graph->graph());
+    QPointF newPos = value.toPointF();
+    qreal width = ND_width(_node->node())*DotDefaultDPI;
+    qreal height = ND_height(_node->node())*DotDefaultDPI;
+    QString newStr = QGVCore::qtToGvPos (QGVCore::centerToOrigin (newPos, -width, -height), gheight);
+
+    if (!newStr.isEmpty()) {
+        qDebug () << newPos;
+        if (oldStr != newStr) {
+            setAttribute ("pos", newStr.toLocal8Bit().data());
+          }
+        return newPos;
+      }
+  } else if (change == ItemPositionHasChanged && _scene) {
+    emit _scene->nodeChanged (this);
+    return value;
+  }
+  return QGraphicsItem::itemChange(change, value);
+}
+
 void QGVNode::updateLayout()
 {
     prepareGeometryChange();

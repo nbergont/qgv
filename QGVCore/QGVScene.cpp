@@ -231,6 +231,17 @@ void QGVScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *mouseEvent)
     QGraphicsScene::mouseDoubleClickEvent(mouseEvent);
 }
 
+void QGVScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
+{
+    QGraphicsItem *item = itemAt(mouseEvent->scenePos(), QTransform());
+    if(item)
+    {
+        if(item->type() == QGVNode::Type)
+            emit nodeMouseRelease (qgraphicsitem_cast<QGVNode*>(item));
+    }
+    QGraphicsScene::mouseReleaseEvent(mouseEvent);
+}
+
 #include <QVarLengthArray>
 #include <QPainter>
 void QGVScene::drawBackground(QPainter * painter, const QRectF & rect)

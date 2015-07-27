@@ -24,6 +24,14 @@ qreal QGVCore::graphHeight(Agraph_t *graph)
     return GD_bb(graph).UR.y;
 }
 
+QString QGVCore::qtToGvPos (QPointF pos, qreal gheight)
+{
+  float x = pos.x();
+  float y = pos.y();
+  //Le repere Y commence du bas dans graphViz et du haut pour Qt !
+  return QString ("%1,%2").arg (x).arg(gheight - y);
+}
+
 QPointF QGVCore::toPoint(pointf p, qreal gheight)
 {
     //Le repere Y commence du bas dans graphViz et du haut pour Qt !

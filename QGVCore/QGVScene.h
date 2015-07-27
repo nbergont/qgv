@@ -58,6 +58,8 @@ public:
 signals:
     void nodeContextMenu(QGVNode* node);
     void nodeDoubleClick(QGVNode* node);
+    void nodeChanged (QGVNode* node);
+    void nodeMouseRelease (QGVNode* node);
 
     void edgeContextMenu(QGVEdge* edge);
     void edgeDoubleClick(QGVEdge* edge);
@@ -72,6 +74,7 @@ public slots:
 protected:
     virtual void contextMenuEvent(QGraphicsSceneContextMenuEvent * contextMenuEvent);
     virtual void mouseDoubleClickEvent(QGraphicsSceneMouseEvent * mouseEvent);
+    virtual void mouseReleaseEvent(QGraphicsSceneMouseEvent * mouseEvent);
     virtual void drawBackground(QPainter * painter, const QRectF & rect);
 private:
     friend class QGVNode;
