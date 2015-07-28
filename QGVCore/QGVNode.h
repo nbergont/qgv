@@ -51,13 +51,14 @@ public:
         return Type;
     }
 
+    void updateLayout();
+
 protected:
     QVariant itemChange (GraphicsItemChange change, const QVariant & value);
 
 private:
     friend class QGVScene;
     friend class QGVSubGraph;
-    void updateLayout();
 		QGVNode(QGVNodePrivate* node, QGVScene *scene);
 
 		// Not implemented in QGVNode.cpp

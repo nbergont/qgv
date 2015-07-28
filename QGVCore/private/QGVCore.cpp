@@ -24,6 +24,18 @@ qreal QGVCore::graphHeight(Agraph_t *graph)
     return GD_bb(graph).UR.y;
 }
 
+bool QGVCore::gvToQtPos (QString att, qreal dpi, qreal gheight, QPointF& pos)
+{
+  QStringList split = att.split(",");
+  if (split.length () != 2) return false;
+  bool ok = true;
+  float x = split[0].toFloat (&ok); if (!ok) return false;
+  float y = split[1].toFloat (&ok); if (!ok) return false;
+  //Le repere Y commence du bas dans graphViz et du haut pour Qt !
+  pos.setX (x); pos.setY((gheight - y));
+  return true;
+}
+
 QString QGVCore::qtToGvPos (QPointF pos, qreal gheight)
 {
   float x = pos.x();
@@ -120,6 +132,8 @@ Qt::BrushStyle QGVCore::toBrushStyle(const QString &style)
 {
     if(style == "filled")
         return Qt::SolidPattern;
+    else if (style == "dashed")
+      return Qt::Dense5Pattern;
     return Qt::NoBrush;
 }
 

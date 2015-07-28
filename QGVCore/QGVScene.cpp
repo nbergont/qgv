@@ -139,11 +139,13 @@ void QGVScene::loadLayout(const QString &text)
 				QGVNode *inode = new QGVNode(new QGVNodePrivate(node), this);
         inode->updateLayout();
         addItem(inode);
+        _nodes.append (inode);
 				for (Agedge_t* edge = agfstout(_graph->graph(), node); edge != NULL; edge = agnxtout(_graph->graph(), edge))
         {
 						QGVEdge *iedge = new QGVEdge(new QGVEdgePrivate(edge), this);
             iedge->updateLayout();
             addItem(iedge);
+            _edges.append (iedge);
         }
 
     }
