@@ -146,6 +146,14 @@ Qt::PenStyle QGVCore::toPenStyle(const QString &style)
     return Qt::SolidLine;
 }
 
+int QGVCore::toPenWidth(const QString &width)
+{
+    bool ok;
+    int w = width.toInt (&ok);
+    if (!ok) return 1;
+    else return w;
+}
+
 QColor QGVCore::toColor(const QString &color)
 {
     return QColor(color);

@@ -134,7 +134,7 @@ void QGVEdge::updateLayout()
         }
     }
 
-    _pen.setWidth(1);
+    _pen.setWidth(QGVCore::toPenWidth(getAttribute("penwidth")));
     _pen.setColor(QGVCore::toColor(getAttribute("color")));
     _pen.setStyle(QGVCore::toPenStyle(getAttribute("style")));
 

@@ -50,6 +50,7 @@ public:
 
     static Qt::BrushStyle toBrushStyle(const QString &style);
     static Qt::PenStyle toPenStyle(const QString &style);
+    static int toPenWidth(const QString &width);
     static QColor toColor(const QString &color);
 
 		typedef struct {
