@@ -143,6 +143,8 @@ Qt::PenStyle QGVCore::toPenStyle(const QString &style)
         return Qt::DashLine;
     else if(style == "dotted")
         return Qt::DotLine;
+    else if(style == "invisible")
+        return Qt::NoPen;
     return Qt::SolidLine;
 }
 
