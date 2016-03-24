@@ -30,7 +30,7 @@ SET(${PROJECT_NAME}_VERSION
 # INCLUDE(CTest)
 
 # Extending the Module path with the local module path of desuto
-SET(CMAKE_MODULE_PATH ${CMAKE_SOURCE_DIR}/cmake/modules )
+SET(CMAKE_MODULE_PATH ${CMAKE_CURRENT_SOURCE_DIR}/cmake/modules )
 
 OPTION(BUILD_DEV "Build development version of qgv" ON)
 OPTION(BUILD_DEBUG "Build in debug mode" ON)
@@ -142,8 +142,8 @@ FIND_PACKAGE(Graphviz REQUIRED)
 # include source tree
 #
 ######################
-SET(libqgv_SOURCE_DIR ${CMAKE_SOURCE_DIR}/QGVCore)
-SET(libqgv_BINARY_DIR ${CMAKE_BINARY_DIR}/QGVCore)
+SET(libqgv_SOURCE_DIR ${CMAKE_CURRENT_SOURCE_DIR}/QGVCore)
+SET(libqgv_BINARY_DIR ${CMAKE_CURRENT_BINARY_DIR}/QGVCore)
 ADD_SUBDIRECTORY(QGVCore)
 ADD_SUBDIRECTORY(Sample)
 
@@ -219,7 +219,7 @@ SET(CPACK_COMPONENTS_ALL
 )
 
 # License file
-SET(CPACK_RESOURCE_FILE_LICENSE ${CMAKE_SOURCE_DIR}/LICENSE.txt)
+SET(CPACK_RESOURCE_FILE_LICENSE ${CMAKE_CURRENT_SOURCE_DIR}/LICENSE.txt)
 
 # Pre selected installation profiles
 SET(CPACK_ALL_INSTALL_TYPES Full Minimal)
