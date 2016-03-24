@@ -19,7 +19,7 @@ License along with this library.
 #define MAINWINDOW_H
 
 #include <QMainWindow>
-#include <QGVScene.h>
+#include "QGVScene.h"
 
 namespace Ui {
 class MainWindow;
