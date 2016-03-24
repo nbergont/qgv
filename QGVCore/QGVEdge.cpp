@@ -59,7 +59,7 @@ void QGVEdge::setLabel(const QString &label)
     setAttribute("xlabel", label);
 }
 
-void QGVEdge::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
+void QGVEdge::paint(QPainter * painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
     painter->save();
 

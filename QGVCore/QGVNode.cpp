@@ -49,7 +49,7 @@ QRectF QGVNode::boundingRect() const
     return _path.boundingRect();
 }
 
-void QGVNode::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
+void QGVNode::paint(QPainter * painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
     painter->save();
 

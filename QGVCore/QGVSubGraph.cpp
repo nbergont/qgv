@@ -83,7 +83,7 @@ QRectF QGVSubGraph::boundingRect() const
     return QRectF(0,0, _width, _height);
 }
 
-void QGVSubGraph::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
+void QGVSubGraph::paint(QPainter * painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
     painter->save();
 
