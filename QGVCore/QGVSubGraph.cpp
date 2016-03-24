@@ -97,7 +97,8 @@ void QGVSubGraph::paint(QPainter * painter, const QStyleOptionGraphicsItem *, QW
 
 void QGVSubGraph::setAttribute(const QString &name, const QString &value)
 {
-		agsafeset(_sgraph->graph(), name.toLocal8Bit().data(), value.toLocal8Bit().data(), "");
+    char empty[] = "";
+		agsafeset(_sgraph->graph(), name.toLocal8Bit().data(), value.toLocal8Bit().data(), empty);
 }
 
 QString QGVSubGraph::getAttribute(const QString &name) const

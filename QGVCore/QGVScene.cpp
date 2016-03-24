@@ -115,7 +115,8 @@ QGVSubGraph *QGVScene::addSubGraph(const QString &name, bool cluster)
 void QGVScene::setRootNode(QGVNode *node)
 {
     Q_ASSERT(_nodes.contains(node));
-		agset(_graph->graph(), "root", node->label().toLocal8Bit().data());
+    char root[] = "root";
+		agset(_graph->graph(), root, node->label().toLocal8Bit().data());
 }
 
 void QGVScene::loadLayout(const QString &text)

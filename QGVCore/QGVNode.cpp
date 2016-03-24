@@ -86,7 +86,8 @@ void QGVNode::paint(QPainter * painter, const QStyleOptionGraphicsItem *, QWidge
 
 void QGVNode::setAttribute(const QString &name, const QString &value)
 {
-		agsafeset(_node->node(), name.toLocal8Bit().data(), value.toLocal8Bit().data(), "");
+    char empty[] = "";
+		agsafeset(_node->node(), name.toLocal8Bit().data(), value.toLocal8Bit().data(), empty);
 }
 
 QString QGVNode::getAttribute(const QString &name) const
