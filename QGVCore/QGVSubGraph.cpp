@@ -24,7 +24,7 @@ License along with this library.
 #include <QDebug>
 #include <QPainter>
 
-QGVSubGraph::QGVSubGraph(QGVGraphPrivate *subGraph, QGVScene *scene): _sgraph(subGraph), _scene(scene)
+QGVSubGraph::QGVSubGraph(QGVGraphPrivate *subGraph, QGVScene *scene):  _scene(scene), _sgraph(subGraph)
 {
     //setFlag(QGraphicsItem::ItemIsSelectable, true);
 }

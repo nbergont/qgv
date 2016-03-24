@@ -23,7 +23,7 @@ License along with this library.
 #include <QDebug>
 #include <QPainter>
 
-QGVEdge::QGVEdge(QGVEdgePrivate *edge, QGVScene *scene) :  _edge(edge), _scene(scene)
+QGVEdge::QGVEdge(QGVEdgePrivate *edge, QGVScene *scene) :  _scene(scene), _edge(edge)
 {
     setFlag(QGraphicsItem::ItemIsSelectable, true);
 }
