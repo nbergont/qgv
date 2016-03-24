@@ -24,7 +24,7 @@ License along with this library.
 #include <QDebug>
 #include <QPainter>
 
-QGVSubGraph::QGVSubGraph(QGVGraphPrivate *subGraph, QGVScene *scene): _sgraph(subGraph), _scene(scene)
+QGVSubGraph::QGVSubGraph(QGVGraphPrivate *subGraph, QGVScene *scene):  _scene(scene), _sgraph(subGraph)
 {
     //setFlag(QGraphicsItem::ItemIsSelectable, true);
 }
@@ -83,7 +83,7 @@ QRectF QGVSubGraph::boundingRect() const
     return QRectF(0,0, _width, _height);
 }
 
-void QGVSubGraph::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
+void QGVSubGraph::paint(QPainter * painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
     painter->save();
 
@@ -97,7 +97,8 @@ void QGVSubGraph::paint(QPainter * painter, const QStyleOptionGraphicsItem * opt
 
 void QGVSubGraph::setAttribute(const QString &name, const QString &value)
 {
-		agsafeset(_sgraph->graph(), name.toLocal8Bit().data(), value.toLocal8Bit().data(), "");
+    char empty[] = "";
+		agsafeset(_sgraph->graph(), name.toLocal8Bit().data(), value.toLocal8Bit().data(), empty);
 }
 
 QString QGVSubGraph::getAttribute(const QString &name) const
