@@ -18,7 +18,7 @@ License along with this library.
 #ifndef QGVSCENE_H
 #define QGVSCENE_H
 
-#include <qgv.h>
+#include "qgv.h"
 #include <QGraphicsScene>
 
 class QGVNode;

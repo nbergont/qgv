@@ -150,7 +150,8 @@ void QGVScene::loadLayout(const QString &text)
 
 void QGVScene::applyLayout()
 {
-		if(gvLayout(_context->context(), _graph->graph(), "dot") != 0)
+    gvFreeLayout(_context->context(), _graph->graph());
+    if(gvLayout(_context->context(), _graph->graph(), "dot") != 0)
     {
         /*
          * Si plantage ici :
