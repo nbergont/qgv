@@ -18,7 +18,7 @@ License along with this library.
 #ifndef QGVEDGE_H
 #define QGVEDGE_H
 
-#include <qgv.h>
+#include "qgv.h"
 #include <QGraphicsItem>
 #include <QPen>
 

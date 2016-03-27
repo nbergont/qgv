@@ -23,7 +23,7 @@ License along with this library.
 #include <QDebug>
 #include <QPainter>
 
-QGVNode::QGVNode(QGVNodePrivate *node, QGVScene *scene): _node(node), _scene(scene)
+QGVNode::QGVNode(QGVNodePrivate *node, QGVScene *scene): _scene(scene), _node(node)
 {
     setFlag(QGraphicsItem::ItemIsSelectable, true);
 }
@@ -49,7 +49,7 @@ QRectF QGVNode::boundingRect() const
     return _path.boundingRect();
 }
 
-void QGVNode::paint(QPainter * painter, const QStyleOptionGraphicsItem * option, QWidget * widget)
+void QGVNode::paint(QPainter * painter, const QStyleOptionGraphicsItem *, QWidget *)
 {
     painter->save();
 
@@ -86,7 +86,8 @@ void QGVNode::paint(QPainter * painter, const QStyleOptionGraphicsItem * option,
 
 void QGVNode::setAttribute(const QString &name, const QString &value)
 {
-		agsafeset(_node->node(), name.toLocal8Bit().data(), value.toLocal8Bit().data(), "");
+    char empty[] = "";
+		agsafeset(_node->node(), name.toLocal8Bit().data(), value.toLocal8Bit().data(), empty);
 }
 
 QString QGVNode::getAttribute(const QString &name) const
