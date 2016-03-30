@@ -154,7 +154,6 @@ void QGVScene::loadLayout(const QString &text)
 
 void QGVScene::applyLayout(const QString &algorithm)
 {
-    freeLayout ();
     if(gvLayout(_context->context(), _graph->graph(),
         algorithm.toLocal8Bit().data()) != 0)
     {
