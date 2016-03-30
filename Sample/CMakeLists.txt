@@ -61,10 +61,3 @@ IF(BINDINGS_QT5)
 	qt5_use_modules(sample Core Widgets)
 	SET(CMAKE_AUTOMOC ON)
 ENDIF(BINDINGS_QT5)
-
-# The COMPONENT option only defines the internal belonging of the INSTALL'ed thing
-INSTALL(
-  TARGETS sample
-  RUNTIME DESTINATION ${bin_DIR}
-  COMPONENT sample
-)
