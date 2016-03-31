@@ -30,7 +30,8 @@ License along with this library.
 #include <QGVEdgePrivate.h>
 #include <QGVNodePrivate.h>
 
-QGVScene::QGVScene(const QString &name, QObject *parent) : QGraphicsScene(parent)
+QGVScene::QGVScene(const QString &name, QObject *parent) : QGraphicsScene(parent),
+                                                           _label (NULL)
 {
 		_context = new QGVGvcPrivate(gvContext());
 		_graph = new QGVGraphPrivate(agopen(name.toLocal8Bit().data(), Agdirected, NULL));
@@ -138,21 +139,23 @@ void QGVScene::loadLayout(const QString &text)
 				QGVNode *inode = new QGVNode(new QGVNodePrivate(node), this);
         inode->updateLayout();
         addItem(inode);
+        _nodes.append (inode);
 				for (Agedge_t* edge = agfstout(_graph->graph(), node); edge != NULL; edge = agnxtout(_graph->graph(), edge))
         {
 						QGVEdge *iedge = new QGVEdge(new QGVEdgePrivate(edge), this);
             iedge->updateLayout();
             addItem(iedge);
+            _edges.append (iedge);
         }
 
     }
     update();
 }
 
-void QGVScene::applyLayout()
+void QGVScene::applyLayout(const QString &algorithm)
 {
-    gvFreeLayout(_context->context(), _graph->graph());
-    if(gvLayout(_context->context(), _graph->graph(), "dot") != 0)
+    if(gvLayout(_context->context(), _graph->graph(),
+        algorithm.toLocal8Bit().data()) != 0)
     {
         /*
          * Si plantage ici :
@@ -181,16 +184,27 @@ void QGVScene::applyLayout()
 		textlabel_t *xlabel = GD_label(_graph->graph());
     if(xlabel)
     {
-        QGraphicsTextItem *item = addText(xlabel->text);
-				item->setPos(QGVCore::centerToOrigin(QGVCore::toPoint(xlabel->pos, QGVCore::graphHeight(_graph->graph())), xlabel->dimen.x, -4));
+      if (_label == NULL)
+        _label = addText(xlabel->text);
+      else
+        _label->setPlainText (xlabel->text);
+      _label->setPos(QGVCore::centerToOrigin(QGVCore::toPoint(xlabel->pos, QGVCore::graphHeight(_graph->graph())), xlabel->dimen.x, -4));
     }
 
     update();
 }
 
+void QGVScene::render (const QString &algorithm) {
+  gvRender(_context->context(), _graph->graph(),
+      algorithm.toLocal8Bit().data(), NULL);
+}
+
+void QGVScene::freeLayout() {
+  gvFreeLayout(_context->context(), _graph->graph());
+}
+
 void QGVScene::clear()
 {
-		gvFreeLayout(_context->context(), _graph->graph());
     _nodes.clear();
     _edges.clear();
     _subGraphs.clear();
@@ -229,6 +243,17 @@ void QGVScene::mouseDoubleClickEvent(QGraphicsSceneMouseEvent *mouseEvent)
             emit subGraphDoubleClick(qgraphicsitem_cast<QGVSubGraph*>(item));
     }
     QGraphicsScene::mouseDoubleClickEvent(mouseEvent);
+}
+
+void QGVScene::mouseReleaseEvent(QGraphicsSceneMouseEvent *mouseEvent)
+{
+    QGraphicsItem *item = itemAt(mouseEvent->scenePos(), QTransform());
+    if(item)
+    {
+        if(item->type() == QGVNode::Type)
+            emit nodeMouseRelease (qgraphicsitem_cast<QGVNode*>(item));
+    }
+    QGraphicsScene::mouseReleaseEvent(mouseEvent);
 }
 
 #include <QVarLengthArray>
