@@ -193,7 +193,6 @@ void QGVScene::loadLayout(const QString &text)
 
 void QGVScene::applyLayout()
 {
-    gvFreeLayout(_context->context(), _graph->graph());
     if(gvLayout(_context->context(), _graph->graph(), "dot") != 0)
     {
         /*
@@ -226,6 +225,8 @@ void QGVScene::applyLayout()
         QGraphicsTextItem *item = addText(xlabel->text);
         item->setPos(QGVCore::centerToOrigin(QGVCore::toPoint(xlabel->pos, QGVCore::graphHeight(_graph->graph())), xlabel->dimen.x, -4));
     }
+
+    gvFreeLayout(_context->context(), _graph->graph());
 
     update();
 }
