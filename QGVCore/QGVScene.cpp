@@ -112,6 +112,25 @@ QGVSubGraph *QGVScene::addSubGraph(const QString &name, bool cluster)
     return item;
 }
 
+void QGVScene::deleteNode(QGVNode* node)
+{
+    agdelnode(node->_node->graph(), node->_node->node());
+    delete node;
+}
+
+void QGVScene::deleteEdge(QGVEdge* edge)
+{
+    agdeledge(_graph->graph(), edge->_edge->edge());
+    delete edge;
+}
+
+void QGVScene::deleteSubGraph(QGVSubGraph *subgraph)
+{
+    //hack we ignore the return value
+    agdelsubg(_graph->graph(), subgraph->_sgraph->graph());
+    delete subgraph;
+}
+
 void QGVScene::setRootNode(QGVNode *node)
 {
     Q_ASSERT(_nodes.contains(node));
@@ -178,11 +197,11 @@ void QGVScene::applyLayout()
         sgraph->updateLayout();
 
     //Graph label
-		textlabel_t *xlabel = GD_label(_graph->graph());
+    textlabel_t *xlabel = GD_label(_graph->graph());
     if(xlabel)
     {
         QGraphicsTextItem *item = addText(xlabel->text);
-				item->setPos(QGVCore::centerToOrigin(QGVCore::toPoint(xlabel->pos, QGVCore::graphHeight(_graph->graph())), xlabel->dimen.x, -4));
+        item->setPos(QGVCore::centerToOrigin(QGVCore::toPoint(xlabel->pos, QGVCore::graphHeight(_graph->graph())), xlabel->dimen.x, -4));
     }
 
     update();
