@@ -55,7 +55,7 @@ private:
     friend class QGVScene;
     friend class QGVSubGraph;
     void updateLayout();
-		QGVNode(QGVNodePrivate* node, QGVScene *scene);
+    QGVNode(QGVNodePrivate* node, QGVScene *scene);
 
 		// Not implemented in QGVNode.cpp
 //		QPainterPath makeShape(Agnode_t* node) const;
@@ -67,7 +67,7 @@ private:
     QImage _icon;
 
     QGVScene *_scene;
-		QGVNodePrivate* _node;
+    QGVNodePrivate* _node;
 };
 
 

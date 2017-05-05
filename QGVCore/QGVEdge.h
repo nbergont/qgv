@@ -55,7 +55,7 @@ public:
     }
 
 private:
-		QGVEdge(QGVEdgePrivate *edge, QGVScene *scene);
+    QGVEdge(QGVEdgePrivate *edge, QGVScene *scene);
 
     QPolygonF toArrow(const QLineF &normal) const;
 
@@ -63,7 +63,7 @@ private:
     //friend class QGVSubGraph;
 
     QGVScene *_scene;
-		QGVEdgePrivate* _edge;
+    QGVEdgePrivate* _edge;
 
     QPainterPath _path;
     QPen _pen;

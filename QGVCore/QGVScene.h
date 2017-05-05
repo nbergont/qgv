@@ -78,8 +78,8 @@ private:
     friend class QGVEdge;
     friend class QGVSubGraph;
 
-		QGVGvcPrivate *_context;
-		QGVGraphPrivate *_graph;
+    QGVGvcPrivate *_context;
+    QGVGraphPrivate *_graph;
     //QFont _font;
 
     QList<QGVNode*> _nodes;
