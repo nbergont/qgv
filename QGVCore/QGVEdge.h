@@ -62,8 +62,8 @@ private:
     friend class QGVScene;
     //friend class QGVSubGraph;
 
-    QGVScene *_scene;
     QGVEdgePrivate* _edge;
+    QGVScene *_scene;
 
     QPainterPath _path;
     QPen _pen;

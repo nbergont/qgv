@@ -14,8 +14,8 @@ public:
     Agraph_t* graph() const;
 
 private:
-    Agraph_t* _parent;
     Agnode_t* _node;
+    Agraph_t* _parent;
 };
 
 #endif // QGVNODEPRIVATE_H
