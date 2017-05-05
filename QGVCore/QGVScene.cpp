@@ -29,6 +29,7 @@ License along with this library.
 #include <QGVGvcPrivate.h>
 #include <QGVEdgePrivate.h>
 #include <QGVNodePrivate.h>
+#include <iostream>
 
 QGVScene::QGVScene(const QString &name, QObject *parent) : QGraphicsScene(parent)
 {
@@ -114,20 +115,42 @@ QGVSubGraph *QGVScene::addSubGraph(const QString &name, bool cluster)
 
 void QGVScene::deleteNode(QGVNode* node)
 {
-    agdelnode(node->_node->graph(), node->_node->node());
+    QList<QGVNode *>::iterator it = std::find(_nodes.begin(), _nodes.end(), node);
+    if(it == _nodes.end())
+    {
+        std::cout << "Error, node not part of Scene" << std::endl;
+        return;
+    }
+    std::cout << "delNode ret " << agdelnode(node->_node->graph(), node->_node->node()) << std::endl;;
+    _nodes.erase(it);
     delete node;
 }
 
 void QGVScene::deleteEdge(QGVEdge* edge)
 {
-    agdeledge(_graph->graph(), edge->_edge->edge());
+    std::cout << "delEdge ret " << agdeledge(_graph->graph(), edge->_edge->edge()) << std::endl;
+    QList<QGVEdge *>::iterator it = std::find(_edges.begin(), _edges.end(), edge);
+    if(it == _edges.end())
+    {
+        std::cout << "Error, QGVEdge not part of Scene" << std::endl;
+        return;
+    }
+    _edges.erase(it);
     delete edge;
 }
 
 void QGVScene::deleteSubGraph(QGVSubGraph *subgraph)
 {
-    //hack we ignore the return value
-    agdelsubg(_graph->graph(), subgraph->_sgraph->graph());
+    std::cout << "Removing sug " << subgraph->_sgraph->graph() << std::endl;
+    std::cout << "delSubg ret " << agclose(subgraph->_sgraph->graph()) << std::endl;
+    QList<QGVSubGraph *>::iterator it = std::find(_subGraphs.begin(), _subGraphs.end(), subgraph);
+    if(it == _subGraphs.end())
+    {
+        std::cout << "Error, QGVSubGraph not part of Scene" << std::endl;
+        return;
+    }
+    _subGraphs.erase(it);
+
     delete subgraph;
 }
 
