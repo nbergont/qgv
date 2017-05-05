@@ -61,13 +61,13 @@ private:
 //		QPainterPath makeShape(Agnode_t* node) const;
 //		QPolygonF makeShapeHelper(Agnode_t* node) const;
 
-    QGVNodePrivate* _node;
     QPainterPath _path;
     QPen _pen;
     QBrush _brush;
     QImage _icon;
 
     QGVScene *_scene;
+    QGVNodePrivate* _node;
 };
 
 
