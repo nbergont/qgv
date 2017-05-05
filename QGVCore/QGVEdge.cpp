@@ -99,7 +99,7 @@ void QGVEdge::paint(QPainter * painter, const QStyleOptionGraphicsItem *, QWidge
 void QGVEdge::setAttribute(const QString &name, const QString &value)
 {
     char empty[] = "";
-		agsafeset(_edge->edge(), name.toLocal8Bit().data(), value.toLocal8Bit().data(), empty);
+    agsafeset(_edge->edge(), name.toLocal8Bit().data(), value.toLocal8Bit().data(), empty);
 }
 
 QString QGVEdge::getAttribute(const QString &name) const
