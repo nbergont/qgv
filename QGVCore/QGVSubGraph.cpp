@@ -50,7 +50,7 @@ QGVNode *QGVSubGraph::addNode(const QString &label)
     }
     agsubnode(_sgraph->graph(), node, TRUE);
 
-    QGVNode *item = new QGVNode(new QGVNodePrivate(node), _scene);
+    QGVNode *item = new QGVNode(new QGVNodePrivate(node, _sgraph->graph()), _scene);
     item->setLabel(label);
     _scene->addItem(item);
     _scene->_nodes.append(item);

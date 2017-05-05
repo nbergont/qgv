@@ -69,7 +69,7 @@ QGVNode *QGVScene::addNode(const QString &label)
         qWarning()<<"Invalid node :"<<label;
         return 0;
     }
-    QGVNode *item = new QGVNode(new QGVNodePrivate(node), this);
+    QGVNode *item = new QGVNode(new QGVNodePrivate(node, _graph->graph()), this);
     item->setLabel(label);
     addItem(item);
     _nodes.append(item);
@@ -135,12 +135,12 @@ void QGVScene::loadLayout(const QString &text)
     //Read nodes and edges
     for (Agnode_t* node = agfstnode(_graph->graph()); node != NULL; node = agnxtnode(_graph->graph(), node))
     {
-				QGVNode *inode = new QGVNode(new QGVNodePrivate(node), this);
+        QGVNode *inode = new QGVNode(new QGVNodePrivate(node, _graph->graph()), this);
         inode->updateLayout();
         addItem(inode);
-				for (Agedge_t* edge = agfstout(_graph->graph(), node); edge != NULL; edge = agnxtout(_graph->graph(), edge))
+        for (Agedge_t* edge = agfstout(_graph->graph(), node); edge != NULL; edge = agnxtout(_graph->graph(), edge))
         {
-						QGVEdge *iedge = new QGVEdge(new QGVEdgePrivate(edge), this);
+            QGVEdge *iedge = new QGVEdge(new QGVEdgePrivate(edge), this);
             iedge->updateLayout();
             addItem(iedge);
         }
