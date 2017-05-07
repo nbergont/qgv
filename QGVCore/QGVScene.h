@@ -48,6 +48,10 @@ public:
     QGVEdge* addEdge(QGVNode* source, QGVNode* target, const QString& label=QString());
     QGVSubGraph* addSubGraph(const QString& name, bool cluster=true);
 
+    void deleteNode(QGVNode *node);
+    void deleteEdge(QGVEdge *edge);
+    void deleteSubGraph(QGVSubGraph *subgraph);
+
     void setRootNode(QGVNode *node);
 
     void loadLayout(const QString &text);
@@ -78,8 +82,8 @@ private:
     friend class QGVEdge;
     friend class QGVSubGraph;
 
-		QGVGvcPrivate *_context;
-		QGVGraphPrivate *_graph;
+    QGVGvcPrivate *_context;
+    QGVGraphPrivate *_graph;
     //QFont _font;
 
     QList<QGVNode*> _nodes;

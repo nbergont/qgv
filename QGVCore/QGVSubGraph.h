@@ -56,8 +56,10 @@ public:
 
 private:
     friend class QGVScene;
-		QGVSubGraph(QGVGraphPrivate* subGraph, QGVScene *scene);
+    QGVSubGraph(QGVGraphPrivate* subGraph, QGVScene *scene);
 
+    QGVScene *_scene;
+    QGVGraphPrivate *_sgraph;
     double _height, _width;
     QPen _pen;
     QBrush _brush;
@@ -65,8 +67,6 @@ private:
     QString _label;
     QRectF _label_rect;
 
-    QGVScene *_scene;
-		QGVGraphPrivate *_sgraph;
     QList<QGVNode*> _nodes;
 };
 

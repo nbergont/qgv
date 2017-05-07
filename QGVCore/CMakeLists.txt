@@ -36,7 +36,7 @@ INCLUDE_DIRECTORIES(
 )
 # Activate Export macro for building the library itself
 # if QGVCORE_LIB is not set or equal 0 (null), import macro is used
-ADD_DEFINITIONS(-DQGVCORE_LIB)
+ADD_DEFINITIONS(-DQGVCORE_LIB -D_PACKAGE_ast -D_dll_import -D_BLD_cdt -D_DLL_BLD)
 
 IF(BINDINGS_QT4)
 	# QT5 does not declare and does not need QT_INCLUDES

@@ -29,47 +29,48 @@ License along with this library.
 #include <QGVGvcPrivate.h>
 #include <QGVEdgePrivate.h>
 #include <QGVNodePrivate.h>
+#include <iostream>
 
 QGVScene::QGVScene(const QString &name, QObject *parent) : QGraphicsScene(parent)
 {
-		_context = new QGVGvcPrivate(gvContext());
-		_graph = new QGVGraphPrivate(agopen(name.toLocal8Bit().data(), Agdirected, NULL));
+    _context = new QGVGvcPrivate(gvContext());
+    _graph = new QGVGraphPrivate(agopen(name.toLocal8Bit().data(), Agdirected, NULL));
     //setGraphAttribute("fontname", QFont().family());
 }
 
 QGVScene::~QGVScene()
 {
-		gvFreeLayout(_context->context(), _graph->graph());
-		agclose(_graph->graph());
-		gvFreeContext(_context->context());
+    gvFreeLayout(_context->context(), _graph->graph());
+    agclose(_graph->graph());
+    gvFreeContext(_context->context());
     delete _graph;
     delete _context;
 }
 
 void QGVScene::setGraphAttribute(const QString &name, const QString &value)
 {
-		agattr(_graph->graph(), AGRAPH, name.toLocal8Bit().data(), value.toLocal8Bit().data());
+    agattr(_graph->graph(), AGRAPH, name.toLocal8Bit().data(), value.toLocal8Bit().data());
 }
 
 void QGVScene::setNodeAttribute(const QString &name, const QString &value)
 {
-		agattr(_graph->graph(), AGNODE, name.toLocal8Bit().data(), value.toLocal8Bit().data());
+    agattr(_graph->graph(), AGNODE, name.toLocal8Bit().data(), value.toLocal8Bit().data());
 }
 
 void QGVScene::setEdgeAttribute(const QString &name, const QString &value)
 {
-		agattr(_graph->graph(), AGEDGE, name.toLocal8Bit().data(), value.toLocal8Bit().data());
+    agattr(_graph->graph(), AGEDGE, name.toLocal8Bit().data(), value.toLocal8Bit().data());
 }
 
 QGVNode *QGVScene::addNode(const QString &label)
 {
-		Agnode_t *node = agnode(_graph->graph(), NULL, TRUE);
+    Agnode_t *node = agnode(_graph->graph(), NULL, TRUE);
     if(node == NULL)
     {
         qWarning()<<"Invalid node :"<<label;
         return 0;
     }
-		QGVNode *item = new QGVNode(new QGVNodePrivate(node), this);
+    QGVNode *item = new QGVNode(new QGVNodePrivate(node, _graph->graph()), this);
     item->setLabel(label);
     addItem(item);
     _nodes.append(item);
@@ -78,14 +79,14 @@ QGVNode *QGVScene::addNode(const QString &label)
 
 QGVEdge *QGVScene::addEdge(QGVNode *source, QGVNode *target, const QString &label)
 {
-		Agedge_t* edge = agedge(_graph->graph(), source->_node->node(), target->_node->node(), NULL, TRUE);
+    Agedge_t* edge = agedge(_graph->graph(), source->_node->node(), target->_node->node(), NULL, TRUE);
     if(edge == NULL)
     {
         qWarning()<<"Invalid egde :"<<label;
         return 0;
     }
 
-		QGVEdge *item = new QGVEdge(new QGVEdgePrivate(edge), this);
+    QGVEdge *item = new QGVEdge(new QGVEdgePrivate(edge), this);
     item->setLabel(label);
     addItem(item);
     _edges.append(item);
@@ -96,9 +97,9 @@ QGVSubGraph *QGVScene::addSubGraph(const QString &name, bool cluster)
 {
     Agraph_t* sgraph;
     if(cluster)
-				sgraph = agsubg(_graph->graph(), ("cluster_" + name).toLocal8Bit().data(), TRUE);
+        sgraph = agsubg(_graph->graph(), ("cluster_" + name).toLocal8Bit().data(), TRUE);
     else
-				sgraph = agsubg(_graph->graph(), name.toLocal8Bit().data(), TRUE);
+        sgraph = agsubg(_graph->graph(), name.toLocal8Bit().data(), TRUE);
 
     if(sgraph == NULL)
     {
@@ -106,24 +107,65 @@ QGVSubGraph *QGVScene::addSubGraph(const QString &name, bool cluster)
         return 0;
     }
 
-		QGVSubGraph *item = new QGVSubGraph(new QGVGraphPrivate(sgraph), this);
+    QGVSubGraph *item = new QGVSubGraph(new QGVGraphPrivate(sgraph), this);
     addItem(item);
     _subGraphs.append(item);
     return item;
+}
+
+void QGVScene::deleteNode(QGVNode* node)
+{
+    QList<QGVNode *>::iterator it = std::find(_nodes.begin(), _nodes.end(), node);
+    if(it == _nodes.end())
+    {
+        std::cout << "Error, node not part of Scene" << std::endl;
+        return;
+    }
+    std::cout << "delNode ret " << agdelnode(node->_node->graph(), node->_node->node()) << std::endl;;
+    _nodes.erase(it);
+    delete node;
+}
+
+void QGVScene::deleteEdge(QGVEdge* edge)
+{
+    std::cout << "delEdge ret " << agdeledge(_graph->graph(), edge->_edge->edge()) << std::endl;
+    QList<QGVEdge *>::iterator it = std::find(_edges.begin(), _edges.end(), edge);
+    if(it == _edges.end())
+    {
+        std::cout << "Error, QGVEdge not part of Scene" << std::endl;
+        return;
+    }
+    _edges.erase(it);
+    delete edge;
+}
+
+void QGVScene::deleteSubGraph(QGVSubGraph *subgraph)
+{
+    std::cout << "Removing sug " << subgraph->_sgraph->graph() << std::endl;
+    std::cout << "delSubg ret " << agclose(subgraph->_sgraph->graph()) << std::endl;
+    QList<QGVSubGraph *>::iterator it = std::find(_subGraphs.begin(), _subGraphs.end(), subgraph);
+    if(it == _subGraphs.end())
+    {
+        std::cout << "Error, QGVSubGraph not part of Scene" << std::endl;
+        return;
+    }
+    _subGraphs.erase(it);
+
+    delete subgraph;
 }
 
 void QGVScene::setRootNode(QGVNode *node)
 {
     Q_ASSERT(_nodes.contains(node));
     char root[] = "root";
-		agset(_graph->graph(), root, node->label().toLocal8Bit().data());
+    agset(_graph->graph(), root, node->label().toLocal8Bit().data());
 }
 
 void QGVScene::loadLayout(const QString &text)
 {
-		_graph->setGraph(QGVCore::agmemread2(text.toLocal8Bit().constData()));
+    _graph->setGraph(QGVCore::agmemread2(text.toLocal8Bit().constData()));
 
-		if(gvLayout(_context->context(), _graph->graph(), "dot") != 0)
+    if(gvLayout(_context->context(), _graph->graph(), "dot") != 0)
     {
         qCritical()<<"Layout render error"<<agerrors()<<QString::fromLocal8Bit(aglasterr());
         return;
@@ -133,14 +175,14 @@ void QGVScene::loadLayout(const QString &text)
 		//gvRenderFilename(_context->context(), _graph->graph(), "png", "debug.png");
 
     //Read nodes and edges
-		for (Agnode_t* node = agfstnode(_graph->graph()); node != NULL; node = agnxtnode(_graph->graph(), node))
+    for (Agnode_t* node = agfstnode(_graph->graph()); node != NULL; node = agnxtnode(_graph->graph(), node))
     {
-				QGVNode *inode = new QGVNode(new QGVNodePrivate(node), this);
+        QGVNode *inode = new QGVNode(new QGVNodePrivate(node, _graph->graph()), this);
         inode->updateLayout();
         addItem(inode);
-				for (Agedge_t* edge = agfstout(_graph->graph(), node); edge != NULL; edge = agnxtout(_graph->graph(), edge))
+        for (Agedge_t* edge = agfstout(_graph->graph(), node); edge != NULL; edge = agnxtout(_graph->graph(), edge))
         {
-						QGVEdge *iedge = new QGVEdge(new QGVEdgePrivate(edge), this);
+            QGVEdge *iedge = new QGVEdge(new QGVEdgePrivate(edge), this);
             iedge->updateLayout();
             addItem(iedge);
         }
@@ -151,7 +193,6 @@ void QGVScene::loadLayout(const QString &text)
 
 void QGVScene::applyLayout()
 {
-    gvFreeLayout(_context->context(), _graph->graph());
     if(gvLayout(_context->context(), _graph->graph(), "dot") != 0)
     {
         /*
@@ -178,19 +219,21 @@ void QGVScene::applyLayout()
         sgraph->updateLayout();
 
     //Graph label
-		textlabel_t *xlabel = GD_label(_graph->graph());
+    textlabel_t *xlabel = GD_label(_graph->graph());
     if(xlabel)
     {
         QGraphicsTextItem *item = addText(xlabel->text);
-				item->setPos(QGVCore::centerToOrigin(QGVCore::toPoint(xlabel->pos, QGVCore::graphHeight(_graph->graph())), xlabel->dimen.x, -4));
+        item->setPos(QGVCore::centerToOrigin(QGVCore::toPoint(xlabel->pos, QGVCore::graphHeight(_graph->graph())), xlabel->dimen.x, -4));
     }
+
+    gvFreeLayout(_context->context(), _graph->graph());
 
     update();
 }
 
 void QGVScene::clear()
 {
-		gvFreeLayout(_context->context(), _graph->graph());
+    gvFreeLayout(_context->context(), _graph->graph());
     _nodes.clear();
     _edges.clear();
     _subGraphs.clear();

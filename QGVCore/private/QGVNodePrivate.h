@@ -5,14 +5,17 @@
 
 class QGVNodePrivate
 {
-	public:
-		QGVNodePrivate(Agnode_t *node = NULL);
+public:
+    QGVNodePrivate(Agnode_t *node, Agraph_t *parent);
 
-		void setNode(Agnode_t *node);
-		Agnode_t* node() const;
+    void setNode(Agnode_t *node);
+    Agnode_t* node() const;
+    
+    Agraph_t* graph() const;
 
-	private:
-		Agnode_t* _node;
+private:
+    Agnode_t* _node;
+    Agraph_t* _parent;
 };
 
 #endif // QGVNODEPRIVATE_H
