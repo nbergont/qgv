@@ -29,6 +29,13 @@ Installation :
 * Configure GRAPHVIZ_PATH in QGraphViz.pro
 * Open with Qt Creator & compile
 
+For macOS :
+* Download qgv sources from GIT : git clone https://github.com/nbergont/qgv.git
+* Install Brew packet manager : https://brew.sh
+* Install Graphviz via brew   : $ brew install graphviz
+* Install pkg-config via brew : $ brew install pkg-config
+* Open with Qt Creator & compile
+
 TODO :
 ------
 
